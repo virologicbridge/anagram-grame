@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>The Anagram Game</title>
+	
+	<script SRC="3anny7.js"></script>
+	<script>
+	
+	var going = setInterval ("removing()",2000); rightCount=0;wrongCount=0;time=0;NOMORE=1;
+	var hit=new Array(14);for(i=0;i<14;i++){hit[i]=0}
+	//initializations================================================================
+	
+	function check(){
+	if(NOMORE){
+		iniG=-88;
+		document.f.t.value+=document.forms[1].s.selectedIndex;
+		w1=document.f.p.value;
+		w2=document.f.q.value;
+		
+		
+		for(i=0;i<7;i++){
+		for(j=7;j>=0;j--){
+			if( w2.indexOf(w1.substring(i,j) ) > -1){
+				temp=j-i;temp=Math.abs(temp);
+				if(temp>iniG){iniG=temp;}
+			}//if no matching gives -1
+		}//inside for
+		}//outside for
+		
+		if(document.forms[1].s.selectedIndex==iniG){
+			rightCount++;
+			document.f.t.value+=" is correct.\n";
+			for(i=0;i<14;i++){hit[i]=0};
+			createWords();
+		}
+		else{
+			wrongCount++;
+			document.f.t.value+=" is incorrect.\n";
+		}
+		document.f.s.options[0].selected=true;//take option back to zero
+	}//NOMORE if
+	}//check=======================================================================
+	
+	function createWords(){
+		
+		
+		w1=document.f.p.value;
+		w2=document.f.q.value;
+		index=Math.random()*195;
+		index=Math.floor(index);
+		
+		
+		
+		whole=A[index];
+		for (m=0;m<2;m++){document.forms[1].elements[m].value=whole.split(":")[m]}
+		
+		
+		for(i=0;i<7;i++){document.forms[0].elements[i].value=document.forms[1].elements[0].value.charAt(i);
+			document.forms[0].elements[i].value=document.forms[0].elements[i].value.toUpperCase();}
+		
+		for(j=7,h=0;j<14;j++){document.forms[0].elements[j].value=document.forms[1].elements[1].value.charAt(h);
+			document.forms[0].elements[j].value=document.forms[0].elements[j].value.toUpperCase();h++;}
+			
+		document.f.t.value="You got "+rightCount+" so far.\n";
+		document.f.t.value+="You made "+wrongCount+" errors.\n"; 
+	}//createWords================================================================
+	
+	function removing(){
+		if (time>=60){alert("Your time has expired.");
+			clearTimeout(weRollin);clearInterval(going);NOMORE=0;
+		}
+		empty=0;
+		w1=document.f.p.value;
+		w2=document.f.q.value;
+		
+		for(i=0;i<14;i++){ if(hit[i]==1){empty++} }
+		
+		if(empty==14){
+			for(i=0;i<14;i++){hit[i]=0}
+			createWords(); 
+			
+		}
+		
+		do{
+			beGone=Math.random()*14;
+			beGone=parseInt(beGone);
+		}while(hit[beGone]==1)
+		
+		document.forms[0].elements[beGone].value="";
+		hit[beGone]=1;
+	}//removing=================================================================================
+	
+	function timer(){
+		time++;
+		document.f.showTime.value=time;
+		weRollin=setTimeout("timer()",1000);
+	}//timer====================================================================================
+	
+	function tryAgain(){
+		window.location="index.html";
+		//time=0;NOMORE=1;rightCount=0;wrongCount=0;
+		//createWords();timer();
+	}//tryAgain===============================================================
+	
+	</script>
+	
+</head>
+
+<body bgcolor="Gray" onload="createWords();timer();">
+<p align="center">
+
+<form name="theWords">
+
+<table bgcolor="Silver"><tr>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+<td bgcolor="White" >&nbsp;&nbsp;<font color="Red" size="+2">How big is the common string?</font>&nbsp;&nbsp;</td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+	<td><input type="Text" size="1"></td>
+</table>
+
+</form>
+
+<form name="f">
+<input type="hidden" name="p" value=""><input type="hidden" name="q" value=""><br><br>
+<p  align="center"><font size="+1" color="White"><i><strong>Number of Characters&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Scorecard</strong></i></font></p>
+<p align="center">
+<select name="s" size="8" onchange="check()" >  //onclick only for IE
+<option>
+<option>1
+<option>2
+<option>3
+<option>4
+<option>5
+<option>6
+<option>7
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<textarea name="t" cols=20 rows=9></textarea>
+
+<br><br><br><br><font color="Yellow" size="+1">You have a total of 60 seconds.</font>
+<br><input name="showTime" type="Text" size="1"><br><br>
+<input name="re" type="button" value="Try Again?" onclick="tryAgain();">
+</p>
+</form>
+
+
+</body>
+</html>
